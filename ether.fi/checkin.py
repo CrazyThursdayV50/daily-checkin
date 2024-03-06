@@ -29,8 +29,14 @@ def print_end():
 def print_points(data={}):
     print("points: \n- ether.fi: {}\n- eigen layer: {}\n".format(data.get("loyaltyPoints"), data.get("eigenlayerPoints")))
 
+def get_badge_points(badge={}):
+    return float(badge.get("points"))
+
 def iter_badges(data={}):
     for badge in data.get("badges"):
+        points = get_badge_points(badge)
+        total_points = data.get("loyaltyPoints")
+        data.update(loyaltyPoints = total_points+points)
         wait_to_streak(badge)
 
 def wait_to_streak(badge={}):
@@ -48,7 +54,7 @@ if __name__ == "__main__":
     address = sys.argv[1]
     print_start()
     data = get_info()
-    print_points(data)
     iter_badges(data)
+    print_points(data)
     print_end()
 
