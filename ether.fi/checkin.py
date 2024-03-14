@@ -21,10 +21,10 @@ def streak():
     return resp.json()
 
 def print_start():
-    print("===============.\nether.fi checkin start\n- account: {}\n- time: {}\n".format(address, datetime.today()))
+    print("===============.\nether.fi checkin start at {}\n- account: {}\n".format(datetime.today(), address))
 
 def print_end():
-    print("ether.fi checkin end\n- account: {}\n- time: {}\n===============".format(address, datetime.today()))
+    print("ether.fi checkin end at {}".format(datetime.today()))
 
 def print_points(data={}):
     print("points: \n- ether.fi: {}\n- eigen layer: {}\n".format(data.get("loyaltyPoints"), data.get("eigenlayerPoints")))
