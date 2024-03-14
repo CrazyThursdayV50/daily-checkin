@@ -37,6 +37,6 @@ if __name__ == "__main__":
     token = sys.argv[2]
     now = int(time.time_ns()/1e6)
     print_start()
-    data = scan(address, token, now)
+    data = scan(token, now)
     print(data)
     print_end()
