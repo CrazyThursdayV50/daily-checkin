@@ -21,23 +21,41 @@ def streak():
     return resp.json()
 
 def print_start():
-    print("===============.\nether.fi checkin start at {}\n- account: {}\n".format(datetime.today(), address))
+    print("===============\nether.fi checkin start at {}\n- account: {}\n".format(datetime.today(), address))
 
 def print_end():
     print("ether.fi checkin end at {}".format(datetime.today()))
 
-def print_points(data={}):
-    print("points: \n- ether.fi: {}\n- eigen layer: {}\n".format(data.get("loyaltyPoints"), data.get("eigenlayerPoints")))
+def print_points(lp=0,ep=0):
+    print("points: \n- ether.fi: {}\n- eigen layer: {}\n".format(lp ,ep))
 
-def get_badge_points(badge={}):
+def get_badge_points(badge={}) -> float:
     return float(badge.get("points"))
 
-def iter_badges(data={}):
-    for badge in data.get("badges"):
+def get_total_points(data={}) -> (float, float):
+    total_lp = 0
+    total_ep = 0
+    for _, (k, v) in enumerate(data.items()):
+        if k == "badges":
+            tp = iter_badges(v)
+            total_lp = total_lp + tp
+
+        else:
+            lp = v.get("loyaltyPoints")
+            ep = v.get("eigenlayerPoints")
+            total_lp = total_lp + lp
+            total_ep = total_ep + ep
+
+    return  total_lp, total_ep
+
+def iter_badges(badges=[]) -> float:
+    tp = 0
+    for badge in badges:
         points = get_badge_points(badge)
-        total_points = data.get("loyaltyPoints")
-        data.update(loyaltyPoints = total_points+points)
+        tp = tp + points
         wait_to_streak(badge)
+
+    return tp
 
 def wait_to_streak(badge={}):
     if badge.get("id") == "15":
@@ -54,7 +72,7 @@ if __name__ == "__main__":
     address = sys.argv[1]
     print_start()
     data = get_info()
-    iter_badges(data)
-    print_points(data)
+    lp, ep = get_total_points(data)
+    print_points(lp,ep)
     print_end()
 
