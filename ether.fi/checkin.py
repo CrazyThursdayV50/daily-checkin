@@ -7,7 +7,7 @@ import json
 from datetime import datetime, timezone
 
 address = "0x"
-url_info = "https://app.ether.fi/api/portfolio/v2/{address}"
+url_info = "https://app.ether.fi/api/portfolio/v3/{address}"
 url_streak = "https://app.ether.fi/api/dailyStreak/updateStreak"
 
 def get_info():
@@ -35,16 +35,19 @@ def get_badge_points(badge={}) -> float:
 def get_total_points(data={}) -> (float, float):
     total_lp = 0
     total_ep = 0
-    for _, (k, v) in enumerate(data.items()):
+    for (k, v) in data.items():
         if k == "badges":
             tp = iter_badges(v)
             total_lp = total_lp + tp
 
         else:
-            lp = v.get("loyaltyPoints")
-            ep = v.get("eigenlayerPoints")
-            total_lp = total_lp + lp
-            total_ep = total_ep + ep
+            try:
+                lp = v.get("loyaltyPoints")
+                ep = v.get("eigenlayerPoints")
+                total_lp = total_lp + lp
+                total_ep = total_ep + ep
+            except:
+                pass
 
     return  total_lp, total_ep
 
