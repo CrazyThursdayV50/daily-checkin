@@ -37,8 +37,9 @@ def get_total_points(data={}) -> (float, float):
     total_ep = 0
     for (k, v) in data.items():
         if k == "badges":
-            tp = iter_badges(v)
-            total_lp = total_lp + tp
+            for (season, badges) in v.items():
+                tp = iter_season_badges(badges)
+                total_lp = total_lp + tp
 
         else:
             try:
@@ -51,7 +52,7 @@ def get_total_points(data={}) -> (float, float):
 
     return  total_lp, total_ep
 
-def iter_badges(badges=[]) -> float:
+def iter_season_badges(badges=[]) -> float:
     tp = 0
     for badge in badges:
         points = get_badge_points(badge)
